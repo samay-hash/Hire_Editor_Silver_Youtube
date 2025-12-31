@@ -1,4 +1,6 @@
 A production-ready YouTube approval system where editors upload videos, creators review and approve them, and approved videos are automatically uploaded to YouTube — ensuring security, control, and zero re-uploads.
+backend ready 
+frontend on working...
 
 🛠 Tech Stack
 
