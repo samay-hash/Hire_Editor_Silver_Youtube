@@ -1,0 +1,61 @@
+<!-- EMAIL -->
+<input
+  id="email"
+  class="block w-full mt-1 text-sm form-input"
+  placeholder="Enter email"
+/>
+
+<!-- PASSWORD -->
+<input
+  id="password"
+  type="password"
+  class="block w-full mt-1 text-sm form-input"
+  placeholder="********"
+/>
+
+<!-- LOGIN BUTTON -->
+<button
+  onclick="loginUser()"
+  class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 rounded-lg"
+>
+  Log in
+</button>
+
+<script>
+  async function loginUser() {
+    const body = {
+      email: document.getElementById('email').value,
+      password: document.getElementById('password').value,
+    }
+
+    try {
+      const res = await fetch('http://localhost:5000/api/v1/user/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // include refresh token cookie
+        body: JSON.stringify(body),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        alert(data.message || 'Login failed')
+        return
+      }
+
+      alert('Login success!')
+
+      // token save (backend returns `accessToken`)
+      const access = data.accessToken || data.token
+      localStorage.setItem('token', access)
+
+      // redirect
+      window.location.href = '/index.html'
+    } catch (err) {
+      alert('Server error — backend check karo')
+      console.log(err)
+    }
+  }
+</script>
+
+<script src="../assets/js/auth.js"></script>

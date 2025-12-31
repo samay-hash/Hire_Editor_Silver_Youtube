@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account</title>
+    <link rel="stylesheet" href="../assets/css/tailwind.output.css" />
+  </head>
+
+  <body class="bg-gray-50 dark:bg-gray-900">
+    <div class="flex items-center min-h-screen p-6">
+      <div
+        class="flex-1 max-w-md mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800"
+      >
+        <div class="p-6">
+          <h2
+            class="mb-4 text-xl font-semibold text-gray-700 dark:text-gray-200"
+          >
+            Create account
+          </h2>
+
+          <!-- EMAIL -->
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Email</span>
+            <input
+              id="email"
+              class="block w-full mt-1 text-sm border rounded-md form-input dark:text-gray-300 dark:bg-gray-700"
+              placeholder="example@gmail.com"
+            />
+          </label>
+
+          <!-- PASSWORD -->
+          <label class="block mt-4 text-sm">
+            <span class="text-gray-700 dark:text-gray-400">Password</span>
+            <input
+              id="password"
+              type="password"
+              class="block w-full mt-1 text-sm border rounded-md form-input dark:text-gray-300 dark:bg-gray-700"
+              placeholder="********"
+            />
+          </label>
+
+          <!-- CONFIRM -->
+          <label class="block mt-4 text-sm">
+            <span class="text-gray-700 dark:text-gray-400">
+              Confirm password
+            </span>
+            <input
+              id="confirm"
+              type="password"
+              class="block w-full mt-1 text-sm border rounded-md form-input dark:text-gray-300 dark:bg-gray-700"
+              placeholder="********"
+            />
+          </label>
+
+          <!-- SUBMIT BUTTON -->
+          <button
+            onclick="registerUser()"
+            class="block w-full px-4 py-2 mt-6 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700"
+          >
+            Create account
+          </button>
+
+          <p class="mt-4 text-sm text-center">
+            Already have an account?
+            <a href="./login.html" class="text-purple-600 hover:underline">
+              Login
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+      async function registerUser() {
+        const email = document.getElementById('email').value
+        const password = document.getElementById('password').value
+        const confirm = document.getElementById('confirm').value
+
+        if (!email || !password) {
+          alert('Email aur password required hai')
+          return
+        }
+
+        if (password !== confirm) {
+          alert('Passwords match nhi kar rahe')
+          return
+        }
+
+        try {
+          // backend exposes signup at /api/v1/user/signup
+          const res = await fetch('http://localhost:5000/api/v1/user/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ email, password }),
+          })
+
+          const data = await res.json()
+
+          if (!res.ok) {
+            return alert(data.message || 'Register failed')
+          }
+
+          alert('Account created!')
+          window.location.href = './login.html'
+        } catch (err) {
+          console.error(err)
+          alert('Server error')
+        }
+      }
+    </script>
+    <script src="../assets/js/auth.js"></script>
+  </body>
+</html>

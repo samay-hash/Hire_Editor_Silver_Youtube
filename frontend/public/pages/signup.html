@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Signup</title>
+  </head>
+
+  <body style="padding: 20px">
+    <h2>Create Account</h2>
+
+    <input id="firstName" placeholder="First name" />
+    <br />
+    <br />
+    <input id="lastName" placeholder="Last name" />
+    <br />
+    <br />
+    <input id="email" placeholder="Email" />
+    <br />
+    <br />
+    <input id="password" type="password" placeholder="Password" />
+    <br />
+    <br />
+
+    <button onclick="registerUser()">Create account</button>
+
+    <p>
+      Already have account?
+      <a href="./login.html">Login here</a>
+    </p>
+
+    <script>
+      async function registerUser() {
+        const first = document.getElementById('firstName').value
+        const last = document.getElementById('lastName').value
+        const body = {
+          name: `${first} ${last}`.trim(),
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value,
+        }
+
+        try {
+          const res = await fetch('http://localhost:5000/api/v1/user/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include', // allow refresh cookie to be set
+            body: JSON.stringify(body),
+          })
+
+          const data = await res.json()
+
+          if (!res.ok) return alert(data.message || 'Signup failed')
+
+          alert('Signup successful!')
+          window.location.href = './login.html'
+        } catch (err) {
+          console.error(err)
+          alert('Server error')
+        }
+      }
+    </script>
+
+    <script src="../assets/js/auth.js"></script>
+  </body>
+</html>
